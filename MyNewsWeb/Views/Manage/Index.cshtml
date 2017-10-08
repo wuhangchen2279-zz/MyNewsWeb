@@ -1,0 +1,76 @@
+﻿@model MyNewsWeb.Models.IndexViewModel
+@{
+    ViewBag.Title = "Your Profile";
+    var imagePath = Model.FileName;
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Manage Your Profile</h4>
+    <hr />
+        @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@Html.DisplayFor(m => m.FirstName) @Html.DisplayFor(m => m.LastName)</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3" align="center">
+                             <img alt="User Pic" src="@Html.ImageOrDefault(imagePath)" class="img-circle img-responsive">
+                             <span><b> Select Your Profile Picture</b></span>
+                             <input type="file" name="postedFile"  class="btn btn-default"/>
+                        </div>
+                        <br/>
+                        <div class="col-md-9 col-lg-9">
+                            <table class="table table-user-information">
+                                <tbody>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.DateOfBirth)</td>
+                                        <td>@Html.EditorFor(m => m.DateOfBirth)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.Street)</td>
+                                        <td>@Html.TextBoxFor(m => m.Street)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.Suburb)</td>
+                                        <td>@Html.TextBoxFor(m => m.Suburb)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.State)</td>
+                                        <td>@Html.TextBoxFor(m => m.State)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.PostCode)</td>
+                                        <td>@Html.TextBoxFor(m => m.PostCode)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.PhoneNumber)</td>
+                                        <td>@Html.TextBoxFor(m => m.PhoneNumber)</td>
+                                    </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer" align="center">
+                    <input type="submit" class="btn btn-sm btn-warning" value="Save Changes">
+                    @if (Model.HasPassword)
+                    {
+                        @Html.ActionLink("Change your password", "ChangePassword", "Manage", null, new { @class = "btn btn-sm btn-success"})
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create", "SetPassword")
+                    }
+                    <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                </div>
+            </div>
+        }
+
+</div>

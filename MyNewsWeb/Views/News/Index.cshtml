@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MyNewsWeb.Models.NewsIndexViewModel>
+@Scripts.Render("~/Scripts/myScripts/minimizeContent.js")
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
+<div class="container">
+    @foreach (var item in Model)
+    {
+        <div class="well">
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="http://placekitten.com/150/150">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">@Html.DisplayFor(modelItem => item.Title)</h4>
+                    <p class="text-right">
+                        @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                    </p>
+                    <p class="minimize">
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </p>
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-calendar"></i>@Html.DisplayFor(modelItem => item.NewsDate)</span></li>
+                        <li>|</li>
+                        <span><i class="glyphicon glyphicon-comment"></i> 0 comments</span>
+                        @*<li>|</li>*@
+                        @*<li>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                            </li>
+                            <li>|</li>
+                            <li>
+                                 Use Font Awesome http://fortawesome.github.io/Font-Awesome/
+                                <span><i class="fa fa-facebook-square"></i></span>
+                                <span><i class="fa fa-twitter-square"></i></span>
+                                <span><i class="fa fa-google-plus-square"></i></span>
+                            </li>*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
