@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Manage News";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Manage News</h2>
+
+@section scripts {
+    <link href="~/Content/CustomStyle.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/AngularDemo.js"></script>
+}
+<div ng-app="demoModule" id="body">
+    <div ng-controller="demoCtrl">
+        <h2>Manage All Users</h2>
+        <h3>List of Users</h3>
+        <table ng-cloak>
+            <thead>
+                <tr>
+                    <th style="display: none;">ID</th>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="items in bookData">
+                    <td hidden="hidden">{{items.Id}}</td>
+                    <td>{{items.BookTitle}}</td>
+                    <td>{{items.Author}}</td>
+                    <td>{{items.Price | currency:'AUD$':2}}</td>
+                    <td>
+                        <button ng-model="$scope.Book"
+                                ng-click="edit(bookData[$index])">
+                            Edit
+                        </button>
+                        <button ng-click="delete($index)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <hr />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Total :</td>
+                    <td></td>
+                    <td>
+                        <label ng-bind="total() |
+currency:'AUD$':2"></label>
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <br />
+        <div style="border-top: solid 2px #282828; width: 430px; height: 10px"> </div>
+        <div ng-show="Book.Id != '' ">
+            <div>
+                <h2>Update Product</h2>
+            </div>
+            <div hidden="hidden">
+                <label for="id">Id</label>
+                <input type="text" data-ng-model="Book.Id" />
+            </div>
+            <div>
+                <label for="name">Book Title</label>
+                <input type="text" data-ng-model="Book.BookTitle" />
+            </div>
+            <div>
+                <label for="category">Author</label>
+                <input type="text" data-ng-model="Book.Author" />
+            </div>
+            <div>
+                <label for="price">Price</label>
+                <input type="text" data-ng-model="Book.Price" />
+            </div>
+            <br />
+            <div>
+                <button data-ng-click="update()">Update</button>
+                <button data-ng-click="cancel()">Cancel</button>
+            </div>
+        </div>
+        <div ng-hide="Book.Id != '' ">
+            <div>
+                <h2>Add New Book</h2>
+            </div>
+            <div>
+                <label for="name">Book Title</label>
+                <input type="text" data-ng-model="Book.BookTitle" />
+            </div>
+            <div>
+                <label for="category">Author</label>
+                <input type="text" data-ng-model="Book.Author" />
+            </div>
+            <div>
+                <label for="price">Price</label>
+                <input type="text" data-ng-model="Book.Price" />
+            </div>
+            <br />
+            <div>
+                <button data-ng-click="save()">Save</button>
+                <button data-ng-click="clear()">Clear</button>
+            </div>
+        </div>
+    </div>
+</div>
+-----------------------------------
