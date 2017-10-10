@@ -69,4 +69,12 @@ namespace MyNewsWeb.Models
         [ForeignKey("UserInfoId")]      // add here
         public virtual UserInfo UserInfo { set; get; }
     }
+
+    public class EmailInput
+    {
+        public string Sender { get; set; }
+        public string[] Receivers { get; set; }
+        public string EmailSubject { get; set; }
+        public string EmailBody { get; set; }
+    }
 }

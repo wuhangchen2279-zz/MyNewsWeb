@@ -15,6 +15,7 @@ using MyNewsWeb.Infrastructure;
 using System.Threading.Tasks;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using MyNewsWeb.Helper;
 
 namespace MyNewsWeb.Controllers
 {
@@ -62,7 +63,7 @@ namespace MyNewsWeb.Controllers
         }
 
 
-        public IEnumerable<AdminUserModel> GetAllUsers()
+        public IEnumerable<ManageUserModel> GetAllUsers()
         {
             /*var role = new IdentityRole();
             role.Name = "Admin";
@@ -71,7 +72,7 @@ namespace MyNewsWeb.Controllers
             RoleManager.RoleExistsAsync("test");
             */
 
-            List<AdminUserModel> userDetails = new List<AdminUserModel>();
+            List<ManageUserModel> userDetails = new List<ManageUserModel>();
             IEnumerable<ApplicationUser> users = UserManager.Users.ToList();
             foreach (var user in users)
             {
@@ -93,7 +94,7 @@ namespace MyNewsWeb.Controllers
                 */
                 //context.SaveChanges();
                 //await UserManager.AddToRoleAsync(user.Id, "Admin");
-                AdminUserModel model = new AdminUserModel
+                ManageUserModel model = new ManageUserModel
                 {
                     FirstName = user.UserInfo.FirstName,
                     LastName = user.UserInfo.LastName,
@@ -103,6 +104,19 @@ namespace MyNewsWeb.Controllers
                 userDetails.Add(model);
             }
             return userDetails;
+        }
+
+        [HttpPost]
+        public IHttpActionResult SendEmail(EmailInput data)
+        {
+            try
+            {
+                EmailHelper mailHelper = new EmailHelper();
+                mailHelper.SendEmail(data.Sender, data.Receivers, data.EmailSubject, data.EmailBody);
+            }
+            catch(Exception ex) { }
+
+            return Ok();
         }
     }
 }

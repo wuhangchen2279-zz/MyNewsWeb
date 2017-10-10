@@ -13,11 +13,15 @@ namespace MyNewsWeb.Controllers
             return View();
         }
 
-        public ActionResult Admin()
+        public ActionResult ManageUsers()
         {
             return View();
         }
 
+        public ActionResult ManageNews()
+        {
+            return View();
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

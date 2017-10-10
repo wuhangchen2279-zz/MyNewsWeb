@@ -63,6 +63,51 @@ namespace MyNewsWeb.Controllers
             return View(newsViewModel.OrderBy(t => t.NewsDate));
         }
 
+        public ActionResult ManageNews()  //for admin to manage news
+        {
+            //var userId = User.Identity.GetUserId();
+            //var currentUser = UserManager.FindById(userId);
+            var news = db.GoodNews.Include(n => n.UserInfo);
+            //List<GoodNew> newsModel = new List<GoodNew>();
+            //foreach (GoodNew goodNew in news)
+            //{
+            //    newsModel.Add(new GoodNew
+            //    {
+            //        Title = goodNew.Title,
+            //        Content = goodNew.Content,
+            //        FileName = goodNew.FileName,
+            //        NewsType = goodNew.NewsType,
+            //        NewsDate = goodNew.NewsDate,
+            //        UserInfoId = goodNew.UserInfoId,
+            //        //FirstName = goodNew.UserInfo.FileName,
+            //        //LastName = goodNew.UserInfo.LastName
+            //    });
+            //}
+            return View(news.OrderBy(t => t.NewsDate));
+        }
+
+        public ActionResult IndividualNews()
+        {
+            var userId = User.Identity.GetUserId();
+            var currentUser = UserManager.FindById(userId);
+            var news = db.GoodNews.Include(n => n.UserInfo);
+            List<NewsIndexViewModel> newsViewModel = new List<NewsIndexViewModel>();
+            foreach (GoodNew goodNew in news)
+            {
+                newsViewModel.Add(new NewsIndexViewModel
+                {
+                    Title = goodNew.Title,
+                    Content = goodNew.Content,
+                    FileName = goodNew.FileName,
+                    NewsType = goodNew.NewsType,
+                    NewsDate = goodNew.NewsDate,
+                    UserInfoId = currentUser.UserInfo.Id,
+                    FirstName = currentUser.UserInfo.FirstName,
+                    LastName = currentUser.UserInfo.LastName
+                });
+            }
+            return View(newsViewModel.OrderBy(t => t.NewsDate));
+        }
 
         // GET: Artiles/Create
         public ActionResult CreateIndividual()

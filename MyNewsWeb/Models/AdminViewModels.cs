@@ -5,11 +5,13 @@ using System.Web;
 
 namespace MyNewsWeb.Models
 {
-    public class AdminUserModel
+    public class ManageUserModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string[] UserRoles { get; set; }
     }
+
+
 }
