@@ -5,112 +5,254 @@
 
 @section scripts {
     <link href="~/Content/CustomStyle.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/angular.js"></script>
-    <script src="~/Scripts/myScripts/AngularForAdmin.js"></script>
+    <script src="https://rawgit.com/myforce/angularjs-dropdown-multiselect/master/src/angularjs-dropdown-multiselect.js"> </script>
 }
-<div ng-app="userModule" id="body">
-    <div ng-controller="userCtrl">
-        <h2>Manage All Users</h2>
-        <h3>List of Users</h3>
-        <table ng-cloak>
-            <thead>
-                <tr>
-                    @*<th style="display: none;">ID</th>*@
-                    <th></th>
-                    <th>Email Address</th>                   
-                    <th>User Name</th>
-                    <th>User Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="user in userData">
-                
-                    @*<td hidden="hidden">{{user.Id}}</td>*@
-                    <td><input type="checkbox" ng-model="folder[user.Email]" value="{{user.Email}}" /></td>
-                    <td>{{user.Email}}</td>
-                    <td>{{user.FirstName}} {{user.LastName}}</td>
-                    <td>{{user.UserRoles}}</td>
-                    <td>
-                        <button ng-model="$scope.User"
-                                ng-click="edit(userData[$index])">
-                            Edit
-                        </button>
-                        <button ng-click="delete($index)">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
 
-            @*<tfoot>
-                <tr>
-                    <td colspan="6">
-                        <hr />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Total :</td>
-                    <td></td>
-                    <td>
-                        <label ng-bind="total() |
-currency:'AUD$':2"></label>
-                    </td>
-                    <td></td>
-                </tr>
-            </tfoot>*@
-        </table>
-        <div>
-            <button data-ng-click="send()">Send Message</button>
+<h2>Manage All Users</h2>
+<div ng-app="userModule" ng-controller="userCtrl">
+    <div class="container" style="text-align:left">
+
+        <div class="row">
+            <div class="col-md-12">
+                <button data-toggle="collapse" data-target="#demo" class="btn btn-default"><i class="fa fa-plus"></i> Add Records</button>
+                <div id="demo" class="collapse" style="margin-top: 10px;">
+                    <form name="UserAddForm">
+                        <div class="form-group">
+                            <label class="control-label">Email:</label>
+                            <input type="email" name="email" placeholder="Enter Email" data-ng-model="User.Email" class="form-control" maxlength="256" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">First Name:</label>
+                            <input type="text" name="firstname" placeholder="Enter First Name" data-ng-model="User.FirstName" maxlength="30" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Last Name:</label>
+                            <input type="text" name="lastname" placeholder="Enter Last Name" data-ng-model="User.LastName" class="form-control" maxlength="30" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Password:</label>
+                            <input id="passwordin" type="password" name="password" placeholder="Enter Password" data-ng-model="User.Password" class="form-control" maxlength="50" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Confirm Password:</label>
+                            <input id="passwordverify" type="password" name="password" placeholder="Enter Password" class="form-control" maxlength="50" required>
+                            <span id="validate-status" class="text text-danger" style="display:none"></span>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Phone:</label>
+                            <input type="text" name="phone" placeholder="Enter Phone Number" data-ng-model="User.PhoneNumber" maxlength="20" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Birth Date:</label>
+                            <input id="dobDatePicker" type="text" name="birthday" placeholder="Enter Birht Date" data-ng-model="User.DateOfBirth" class="form-control" maxlength="50">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Street:</label>
+                            <input type="text" name="street" placeholder="Enter Street" data-ng-model="User.Street" class="form-control" maxlength="50">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Suburb:</label>
+                            <input type="text" name="suburb" placeholder="Enter Suburb" data-ng-model="User.Suburb" class="form-control" maxlength="20">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">State:</label>
+                            <input type="text" name="state" placeholder="Enter State" data-ng-model="User.State" class="form-control" maxlength="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Postcode:</label>
+                            <input type="text" name="postcode" placeholder="Enter Postcode" data-ng-model="User.PostCode" class="form-control" maxlength="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">User Roles:</label>
+                            <div ng-dropdown-multiselect=""
+                                 options="userRolesOptions"
+                                 selected-model="User.UserRoles"
+                                 extra-settings="selected_baseline_settings"
+                                 translation-texts="selected_baselines_customTexts"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" data-ng-click="saveUser()">Submit</button>
+                            <button class="btn btn-primary" data-ng-click="clearUser()" type="button">Clear</button>
+                        </div>
+                    </form>
+                </div>
+                <br>
+                <br>
+                <form>
+                    <div class="form-group">
+                        <span for="predicate">Search for:</span>
+                        <select class="form-control" id="predicate" ng-model="selectedPredicateUser" ng-options="predicateUser for predicateUser in predicateUsers"></select>
+                    </div>
+                    <div class="form-group">
+                        <span for="items">items by page</span>
+                        <input class="input-sm form-control" name="items" id="items" type="number" ng-model="itemsByPage" />
+                    </div>
+                </form>
+                <table st-safe-src="userData" st-table="displayed" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th style="display:none"></th>
+                            <th st-sort="Email">Email</th>
+                            <th st-sort="FirstName">First Name</th>
+                            <th st-sort="LastName">Last Name</th>
+                            <th st-sort="PhoneNumber">Phone Number</th>
+                            <th st-sort="DateOfBirth">Date Of Birth</th>
+                            <th st-sort="Street">Street</th>
+                            <th st-sort="Suburb">Suburb</th>
+                            <th st-sort="State">State</th>
+                            <th st-sort="PostCode">Postcode</th>
+                            <th st-sort="UserRoles">User Roles</th>
+                            <th st-sort="FileName">Profile Picture</th>
+                            <th colspan="2">Actions</th>
+                        </tr>
+                        <tr>
+                            <th colspan="7">
+                                <input st-search placeholder="Global Search" class="input-sm form-control" type="search" />
+                            </th>
+                            <th colspan="7">
+                                <input st-search="{{selectedPredicateUser}}" placeholder="Search For {{selectedPredicateUser}}" class="input-sm form-control" type="search" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in displayed">
+                            <td><input type="checkbox" ng-model="folder[user.Email]" value="{{user.Email}}" /></td>
+                            <td style="display:none">{{user.Id}}</td>
+                            <td>{{user.Email}}</td>
+                            <td>{{user.FirstName}}</td>
+                            <td>{{user.LastName}}</td>
+                            <td>{{user.PhoneNumber}}</td>
+                            <td>{{user.DateOfBirth | date: "dd/MM/yyyy"}}</td>
+                            <td>{{user.Street}}</td>
+                            <td>{{user.Suburb}}</td>
+                            <td>{{user.State}}</td>
+                            <td>{{user.PostCode}}</td>
+                            <td><span ng-repeat="role in user.UserRoles"> {{role.id}},</span></td>
+                            <td><img src="~/Content/Uploads/{{user.FileName}}" alt="Profile Picture Not Available" height="100" width="100"/></td>
+                            <td>
+                                <a style="display: inline-block;position: relative;z-index: 1;" class="btn btn-info btn-sm" ng-click="editUser(displayed[$index])" data-toggle="modal" href="#userEditModal"><i class="fa fa-pencil"></i> Edit</a>
+                                <p style="margin-top: 5px" />
+                                <a style="display: inline-block;position: relative;z-index: 1;" ng-click="editUser(displayed[$index])" data-toggle="modal" href="#userDeleteModal" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="14">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="3"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="14">
+                                <button data-ng-click="send()" class="btn btn-warning">Send Message</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
-        <br />
-        <div style="border-top: solid 2px #282828; width: 430px; height: 10px"> </div>
-        <div ng-show="Book.Id != '' ">
-            <div>
-                <h2>Update User Information</h2>
-            </div>
-            @*<div hidden="hidden">
-                <label for="id">Id</label>
-                <input type="text" data-ng-model="Book.Id" />
-            </div>*@
-            <div>
-                <label for="name">First Name</label>
-                <input type="text" data-ng-model="User.FirstName" />
-            </div>
-            <div>
-                <label for="name">Last Name</label>
-                <input type="text" data-ng-model="User.LastName" />
-            </div>
-            <div>
-                <label for="email">Email Address</label>
-                <input type="text" data-ng-model="User.Email" />
-            </div>
-            <br />
-            <div>
-                <button data-ng-click="update()">Update</button>
-                <button data-ng-click="cancel()">Cancel</button>
+    </div>
+
+    <div class="modal fade" id="userEditModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Records</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="UserEditForm">
+                        <input type="hidden" name="userid" data-ng-model="User.Id">
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            <input maxlength="256" type="text" name="email" data-ng-model="User.Email" placeholder="Enter Email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">First Name</label>
+                            <input maxlength="30" type="text" name="firstname" data-ng-model="User.FirstName" placeholder="Enter First Name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Last Name</label>
+                            <input maxlength="30" type="email" name="lastname" data-ng-model="User.LastName" placeholder="Enter Last Name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Phone</label>
+                            <input maxlength="20" type="text" name="phonenumber" data-ng-model="User.PhoneNumber" placeholder="Enter Phone Number" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Birthday</label>
+                            <input id="dobDatePicker2" maxlength="50" type="text" name="dob" data-ng-model="User.DateOfBirth" placeholder="Enter Birthday" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Street</label>
+                            <input maxlength="50" type="text" name="street" data-ng-model="User.Street" placeholder="Enter Steet" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Suburb</label>
+                            <input maxlength="20" type="text" name="suburb" data-ng-model="User.Suburb" placeholder="Enter Suburb" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">State</label>
+                            <input maxlength="10" type="text" name="state" data-ng-model="User.State" placeholder="Enter State" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Postcode</label>
+                            <input maxlength="10" type="text" name="postcode" data-ng-model="User.PostCode" placeholder="Enter PostCode" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">User Roles</label>
+                            <div ng-dropdown-multiselect=""
+                                 options="userRolesOptions"
+                                 selected-model="User.UserRoles"
+                                 extra-settings="selected_baseline_settings"
+                                 translation-texts="selected_baselines_customTexts"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" name="edit" data-ng-click="updateUser()" data-dismiss="modal">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
-        <div ng-hide="User.Id != '' ">
-            <div>
-                <h2>Add New User</h2>
-            </div>
-            <div>
-                <label for="name">First Name</label>
-                <input type="text" data-ng-model="User.FirstName" />
-            </div>
-            <div>
-                <label for="name">Last Name</label>
-                <input type="text" data-ng-model="User.LastName" />
-            </div>
-            <div>
-                <label for="email">Email Address</label>
-                <input type="text" data-ng-model="User.Email" />
-            </div>
-            <br />
-            <div>
-                <button data-ng-click="save()">Save</button>
-                <button data-ng-click="clear()">Clear</button>
+    </div>
+
+    <div class="modal fade" id="userDeleteModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Records</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="useri" data-ng-model="User.Id">
+                    <p>Are you sure want to Delete User {{User.Email}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" name="delete" data-dismiss="modal" ng-click="deleteUser()">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
------------------------------------

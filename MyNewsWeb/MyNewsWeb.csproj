@@ -223,13 +223,9 @@
     <Compile Include="Helper\EmailHelper.cs" />
     <Compile Include="Helper\HtmlHelperExtensions.cs" />
     <Compile Include="Infrastructure\ApplicationRoleManager.cs" />
-    <Compile Include="Migrations\201710080649148_initialCreate.cs" />
-    <Compile Include="Migrations\201710080649148_initialCreate.Designer.cs">
-      <DependentUpon>201710080649148_initialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710080844426_judyupdate.cs" />
-    <Compile Include="Migrations\201710080844426_judyupdate.Designer.cs">
-      <DependentUpon>201710080844426_judyupdate.cs</DependentUpon>
+    <Compile Include="Migrations\201710101131323_initialcreate.cs" />
+    <Compile Include="Migrations\201710101131323_initialcreate.Designer.cs">
+      <DependentUpon>201710101131323_initialcreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -246,6 +242,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\CustomStyle.css" />
     <Content Include="Content\DefaultImage.png" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\Uploads\admin.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -256,6 +254,8 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\jquery-1.12.4.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\myScripts\AngularForAdmin.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -272,8 +272,11 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\myScripts\JQueryUI.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\smart-table.js" />
+    <Content Include="Scripts\smart-table.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -312,8 +315,8 @@
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\Home\ManageUsers.cshtml" />
-    <Content Include="Views\Home\ManageNews.cshtml" />
     <Content Include="Views\News\ManageNews.cshtml" />
+    <Content Include="Scripts\smart-table.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -327,11 +330,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710080649148_initialCreate.resx">
-      <DependentUpon>201710080649148_initialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710080844426_judyupdate.resx">
-      <DependentUpon>201710080844426_judyupdate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710101131323_initialcreate.resx">
+      <DependentUpon>201710101131323_initialcreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

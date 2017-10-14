@@ -23,7 +23,8 @@ namespace MyNewsWeb.Controllers
     {
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
-        //ApplicationDbContext context = new ApplicationDbContext();
+          
+        ApplicationDbContext context = new ApplicationDbContext();
 
         public AdminController() : this(new ApplicationUserManager(new UserStore<ApplicationUser>(new ApplicationDbContext())), 
             new ApplicationRoleManager(new RoleStore<IdentityRole>(new ApplicationDbContext())))
@@ -65,45 +66,147 @@ namespace MyNewsWeb.Controllers
 
         public IEnumerable<ManageUserModel> GetAllUsers()
         {
-            /*var role = new IdentityRole();
-            role.Name = "Admin";
-            RoleManager.Create(role);
             
-            RoleManager.RoleExistsAsync("test");
-            */
-
             List<ManageUserModel> userDetails = new List<ManageUserModel>();
             IEnumerable<ApplicationUser> users = UserManager.Users.ToList();
             foreach (var user in users)
             {
-                /*
-                try
-                {
-                    UserManager.AddToRole(user.Id, "Admin");
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    foreach (var errors in ex.EntityValidationErrors)
+                //if(!User.Identity.GetUserId().Equals(user.Id))
+                //{
+                    ManageUserModel model = new ManageUserModel
                     {
-                        foreach (var error in errors.ValidationErrors)
-                        {
-                            Trace.TraceInformation("Property: {0} Error: {1}", error.PropertyName, error.ErrorMessage);
-                        }
-                    }
-                }
-                */
-                //context.SaveChanges();
-                //await UserManager.AddToRoleAsync(user.Id, "Admin");
-                ManageUserModel model = new ManageUserModel
-                {
-                    FirstName = user.UserInfo.FirstName,
-                    LastName = user.UserInfo.LastName,
-                    Email = user.Email,
-                    UserRoles = UserManager.GetRoles(user.Id).ToArray()
-                };
-                userDetails.Add(model);
+                        Id = user.Id,
+                        FirstName = user.UserInfo.FirstName,
+                        LastName = user.UserInfo.LastName,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber,
+                        DateOfBirth = user.UserInfo.DateOfBirth,
+                        Street = user.UserInfo.Street,
+                        Suburb = user.UserInfo.Suburb,
+                        State = user.UserInfo.State,
+                        PostCode = user.UserInfo.PostCode,
+                        FileName = user.UserInfo.FileName,
+                        UserRoles = generateMyRolesArr(UserManager.GetRoles(user.Id))
+                    };
+                    userDetails.Add(model);
+                //}
+                
             }
             return userDetails;
+        }
+
+        private MyRole[] generateMyRolesArr(IList<string> roles)
+        {
+            IList<MyRole> myroles = new List<MyRole>();
+            foreach(string roleName in roles)
+            { 
+                string id = string.Empty;
+                myroles.Add(new MyRole { id = roleName });
+            }
+            return myroles.ToArray();
+        }
+
+        [AcceptVerbs("GET", "PUT")]
+        [HttpPut]
+        public async Task<IEnumerable<ManageUserModel>> UpdateUser(string id, ManageUserModel model)
+        {
+            var user = UserManager.FindById(id);
+            var roles = await UserManager.GetRolesAsync(user.Id);
+            user.UserName = model.Email;
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+            user.UserInfo.FirstName = model.FirstName;
+            user.UserInfo.LastName = model.LastName;
+            user.UserInfo.DateOfBirth = model.DateOfBirth;
+            user.UserInfo.Street = model.Street;
+            user.UserInfo.Suburb = model.Suburb;
+            user.UserInfo.State = model.State;
+            user.UserInfo.PostCode = model.PostCode;
+
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                if(roles.Count > 0)
+                {
+                    await UserManager.RemoveFromRolesAsync(user.Id, roles.ToArray());
+                }
+                if(model.UserRoles.Length > 0)
+                {
+                    foreach (MyRole role in model.UserRoles)
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, role.id);
+                    }
+                }
+                return GetAllUsers();
+            }
+            else
+            {
+                throw new Exception("User updted unsuccessfully");
+            }
+        }
+
+        [AcceptVerbs("GET", "DELETE")]
+        [HttpDelete]
+        public async Task<IEnumerable<ManageUserModel>> DeleteUser(string id)
+        {
+            var user = UserManager.FindById(id);
+            var roles = await UserManager.GetRolesAsync(user.Id);
+            if (roles.Count > 0)
+            {
+                await UserManager.RemoveFromRolesAsync(user.Id, roles.ToArray());
+            }
+            var userinfo = context.UserInfos.Find(user.UserInfo.Id);
+            context.UserInfos.Remove(userinfo);
+            var result =  await UserManager.DeleteAsync(user);
+            context.SaveChanges();
+            if (result.Succeeded)
+                return GetAllUsers();
+            else
+                throw new Exception("User deleted unsuccessfully");
+        }
+
+        [HttpPost]
+        public async Task<ManageUserModel> AddUser(ManageUserModel model)
+        {
+            
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                UserInfo = new UserInfo
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DateOfBirth = model.DateOfBirth,
+                    Street = model.Street,
+                    Suburb = model.Suburb,
+                    State = model.State,
+                    PostCode = model.PostCode
+                }
+            };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                if (model.UserRoles.Length > 0)
+                {
+                    foreach (MyRole role in model.UserRoles)
+                    {
+                        if (!RoleManager.RoleExists(role.id))
+                        {
+                            RoleManager.Create(new IdentityRole(role.id));
+                        }
+
+                        await UserManager.AddToRoleAsync(user.Id, role.id);
+                    }
+                }
+                model.Id = user.Id;
+                return model;
+            }
+            else
+            {
+                throw new Exception("User is not created successfully");
+            }
         }
 
         [HttpPost]
@@ -114,7 +217,9 @@ namespace MyNewsWeb.Controllers
                 EmailHelper mailHelper = new EmailHelper();
                 mailHelper.SendEmail(data.Sender, data.Receivers, data.EmailSubject, data.EmailBody);
             }
-            catch(Exception ex) { }
+            catch(Exception ex) {
+                throw new Exception("Error: Email sent unsuccessfully");
+            }
 
             return Ok();
         }

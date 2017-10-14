@@ -31,7 +31,7 @@
                                 <tbody>
                                     <tr>
                                         <td>@Html.LabelFor(m => m.DateOfBirth)</td>
-                                        <td>@Html.EditorFor(m => m.DateOfBirth)</td>
+                                        <td>@Html.EditorFor(m => m.DateOfBirth, new { htmlAttributes = new { id = "dobDatePicker" } })</td>
                                     </tr>
                                     <tr>
                                         <td>@Html.LabelFor(m => m.Street)</td>
