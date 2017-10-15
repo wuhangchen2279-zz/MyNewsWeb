@@ -44,6 +44,8 @@ namespace MyNewsWeb.Models
         }
         public IDictionary<int, string> Authors { get; set; }
         public IDictionary<string, string> NewsTypes { get; set; }
+
+        public bool IsAuthenticate { get; set; }
     }
 
     public class NewsCommentsViewModel 

@@ -1,5 +1,5 @@
 ﻿// Defining angularjs module
-var app = angular.module('appModule', ['angularjs-dropdown-multiselect', 'smart-table']);
+var app = angular.module('appModule', ['angularjs-dropdown-multiselect', 'smart-table', 'ngTextTruncate']);
 // Defining angularjs Controller and injecting ProductsService
 app.controller('userCtrl', function ($scope, $http, UserService) {
     $scope.predicateUsers = ['Email', 'FirstName', 'LastName'];
@@ -192,7 +192,7 @@ app.factory('UserService', function ($http) {
     return fac;
 });
 
-app.controller('newsCtrl', function ($scope, $http, NewsService) {
+app.controller('newsCtrl', function ($scope, $http, $window, NewsService) {
 
     $scope.newsData = null;
     // Fetching records from the factory created at the bottom of the script file
@@ -221,6 +221,31 @@ app.controller('newsCtrl', function ($scope, $http, NewsService) {
             alert("Error : " + response.data.ExceptionMessage);
         });
         
+    }
+
+    $scope.News = {
+        Title: '',
+        NewsDate: '',
+        Content: '',
+        FirstName: '',
+        LastName: '',
+        FileName: ''
+    }
+
+    $scope.openPdfModal = function (data) {
+        $scope.News.Title = data.Title;
+        $scope.News.Content = data.Content;
+        $scope.News.NewsDate = data.NewsDate;
+        $scope.News.FirstName = data.FirstName;
+        $scope.News.LastName = data.LastName;
+        $scope.News.FileName = data.FileName;
+    }
+
+    $scope.redirectLogin = function () {
+        alert("Please login first!");
+        var host = $window.location.host;
+        var landingUrl = "http://" + host + "/Account/Login";
+        $window.location.href = landingUrl;
     }
 
     $scope.postComment = function () {

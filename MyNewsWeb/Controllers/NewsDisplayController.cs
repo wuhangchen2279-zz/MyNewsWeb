@@ -110,7 +110,8 @@ namespace MyNewsWeb.Controllers
                     NewsDate = item.NewsDate,
                     UserInfoId = item.UserInfoId,
                     FirstName = item.UserInfo.FirstName,
-                    LastName = item.UserInfo.LastName
+                    LastName = item.UserInfo.LastName,
+                    IsAuthenticate = HttpContext.Current.User.Identity.IsAuthenticated
                 };
                 newsList.Add(data);
 
