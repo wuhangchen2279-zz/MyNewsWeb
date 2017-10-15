@@ -37,5 +37,6 @@ namespace MyNewsWeb.Models
 
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<GoodNew> GoodNews { get; set; }
+        public DbSet<NewsComment> NewsComments { get; set; }
     }
 }

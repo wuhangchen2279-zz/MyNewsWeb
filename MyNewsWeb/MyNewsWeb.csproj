@@ -227,6 +227,26 @@
     <Compile Include="Migrations\201710101131323_initialcreate.Designer.cs">
       <DependentUpon>201710101131323_initialcreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710141351381_ondelete-cascade.cs" />
+    <Compile Include="Migrations\201710141351381_ondelete-cascade.Designer.cs">
+      <DependentUpon>201710141351381_ondelete-cascade.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710150002402_removeOnModelCreating.cs" />
+    <Compile Include="Migrations\201710150002402_removeOnModelCreating.Designer.cs">
+      <DependentUpon>201710150002402_removeOnModelCreating.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710150008067_removeOnModelCreating1.cs" />
+    <Compile Include="Migrations\201710150008067_removeOnModelCreating1.Designer.cs">
+      <DependentUpon>201710150008067_removeOnModelCreating1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710150016276_userinforidrequired.cs" />
+    <Compile Include="Migrations\201710150016276_userinforidrequired.Designer.cs">
+      <DependentUpon>201710150016276_userinforidrequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710150058478_addNewsComments.cs" />
+    <Compile Include="Migrations\201710150058478_addNewsComments.Designer.cs">
+      <DependentUpon>201710150058478_addNewsComments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
@@ -241,7 +261,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\CustomStyle.css" />
-    <Content Include="Content\DefaultImage.png" />
+    <Content Include="Content\DefaultNewsImage.png" />
+    <Content Include="Content\DefaultProfileImage.png" />
     <Content Include="Content\images\ui-icons_444444_256x240.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\Uploads\admin.png" />
@@ -315,8 +336,11 @@
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\Home\ManageUsers.cshtml" />
-    <Content Include="Views\News\ManageNews.cshtml" />
     <Content Include="Scripts\smart-table.min.js.map" />
+    <Content Include="Views\News\ManageNews.cshtml" />
+    <Content Include="Views\News\Create.cshtml" />
+    <Content Include="Views\News\Edit.cshtml" />
+    <Content Include="Views\News\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -332,6 +356,21 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201710101131323_initialcreate.resx">
       <DependentUpon>201710101131323_initialcreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710141351381_ondelete-cascade.resx">
+      <DependentUpon>201710141351381_ondelete-cascade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710150002402_removeOnModelCreating.resx">
+      <DependentUpon>201710150002402_removeOnModelCreating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710150008067_removeOnModelCreating1.resx">
+      <DependentUpon>201710150008067_removeOnModelCreating1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710150016276_userinforidrequired.resx">
+      <DependentUpon>201710150016276_userinforidrequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710150058478_addNewsComments.resx">
+      <DependentUpon>201710150058478_addNewsComments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

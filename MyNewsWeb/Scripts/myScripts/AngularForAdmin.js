@@ -1,5 +1,5 @@
 ﻿// Defining angularjs module
-var app = angular.module('userModule', ['angularjs-dropdown-multiselect', 'smart-table']);
+var app = angular.module('appModule', ['angularjs-dropdown-multiselect', 'smart-table']);
 // Defining angularjs Controller and injecting ProductsService
 app.controller('userCtrl', function ($scope, $http, UserService) {
     $scope.predicateUsers = ['Email', 'FirstName', 'LastName'];

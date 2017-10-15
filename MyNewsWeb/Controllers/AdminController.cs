@@ -71,8 +71,8 @@ namespace MyNewsWeb.Controllers
             IEnumerable<ApplicationUser> users = UserManager.Users.ToList();
             foreach (var user in users)
             {
-                //if(!User.Identity.GetUserId().Equals(user.Id))
-                //{
+                if(!User.Identity.GetUserId().Equals(user.Id))
+                {
                     ManageUserModel model = new ManageUserModel
                     {
                         Id = user.Id,
@@ -89,7 +89,7 @@ namespace MyNewsWeb.Controllers
                         UserRoles = generateMyRolesArr(UserManager.GetRoles(user.Id))
                     };
                     userDetails.Add(model);
-                //}
+                }
                 
             }
             return userDetails;

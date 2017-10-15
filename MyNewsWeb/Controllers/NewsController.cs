@@ -9,6 +9,9 @@ using System.Web.Mvc;
 using MyNewsWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System.Threading.Tasks;
+using System.Collections;
+using System.IO;
 
 namespace MyNewsWeb.Controllers
 {
@@ -45,78 +48,107 @@ namespace MyNewsWeb.Controllers
             var userId = User.Identity.GetUserId();
             var currentUser = UserManager.FindById(userId);
             var news = db.GoodNews.Include(n => n.UserInfo);
-            List<NewsIndexViewModel> newsViewModel = new List<NewsIndexViewModel>();
+            List<NewsViewModel> newsViewModel = new List<NewsViewModel>();
             foreach (GoodNew goodNew in news)
             {
-                newsViewModel.Add(new NewsIndexViewModel
+                newsViewModel.Add(new NewsViewModel
                 {
                     Title = goodNew.Title,
                     Content = goodNew.Content,
                     FileName = goodNew.FileName,
                     NewsType = goodNew.NewsType,
                     NewsDate = goodNew.NewsDate,
-                    UserInfoId = currentUser.UserInfo.Id,
-                    FirstName = currentUser.UserInfo.FirstName,
-                    LastName = currentUser.UserInfo.LastName
+                    UserInfoId = goodNew.UserInfoId,
+                    FirstName = goodNew.UserInfo.FirstName,
+                    LastName = goodNew.UserInfo.LastName
                 });
             }
             return View(newsViewModel.OrderBy(t => t.NewsDate));
         }
 
-        public ActionResult ManageNews()  //for admin to manage news
-        {
-            //var userId = User.Identity.GetUserId();
-            //var currentUser = UserManager.FindById(userId);
-            var news = db.GoodNews.Include(n => n.UserInfo);
-            //List<GoodNew> newsModel = new List<GoodNew>();
-            //foreach (GoodNew goodNew in news)
-            //{
-            //    newsModel.Add(new GoodNew
-            //    {
-            //        Title = goodNew.Title,
-            //        Content = goodNew.Content,
-            //        FileName = goodNew.FileName,
-            //        NewsType = goodNew.NewsType,
-            //        NewsDate = goodNew.NewsDate,
-            //        UserInfoId = goodNew.UserInfoId,
-            //        //FirstName = goodNew.UserInfo.FileName,
-            //        //LastName = goodNew.UserInfo.LastName
-            //    });
-            //}
-            return View(news.OrderBy(t => t.NewsDate));
-        }
-
-        public ActionResult IndividualNews()
+        //for admin to manage news
+        public ActionResult ManageNews()  
         {
             var userId = User.Identity.GetUserId();
             var currentUser = UserManager.FindById(userId);
-            var news = db.GoodNews.Include(n => n.UserInfo);
-            List<NewsIndexViewModel> newsViewModel = new List<NewsIndexViewModel>();
-            foreach (GoodNew goodNew in news)
+            List<NewsViewModel> newsViewModels = new List<NewsViewModel>();
+
+            if (UserManager.IsInRole(userId, "Admin"))
             {
-                newsViewModel.Add(new NewsIndexViewModel
+                var newslist = (from user in db.UserInfos
+                            join news in db.GoodNews on user.Id equals news.UserInfoId
+                            select new { news.Id, news.Title, news.Content, news.NewsType, news.NewsDate, news.UserInfoId, news.FileName, user.FirstName, user.LastName }
+                            ).ToList();
+                foreach (var item in newslist)
                 {
-                    Title = goodNew.Title,
-                    Content = goodNew.Content,
-                    FileName = goodNew.FileName,
-                    NewsType = goodNew.NewsType,
-                    NewsDate = goodNew.NewsDate,
-                    UserInfoId = currentUser.UserInfo.Id,
-                    FirstName = currentUser.UserInfo.FirstName,
-                    LastName = currentUser.UserInfo.LastName
-                });
+                    newsViewModels.Add(new NewsViewModel
+                    {
+                        Id = item.Id,
+                        Title = item.Title,
+                        Content = item.Content,
+                        FileName = item.FileName,
+                        NewsType = item.NewsType,
+                        NewsDate = item.NewsDate,
+                        UserInfoId = item.UserInfoId,
+                        FirstName = item.FirstName,
+                        LastName = item.LastName
+                    });
+                }
             }
-            return View(newsViewModel.OrderBy(t => t.NewsDate));
+            else
+            {
+               var newslist = (from user in db.UserInfos
+                                join news in db.GoodNews on user.Id equals currentUser.UserInfo.Id
+                               select new { news.Id, news.Title, news.Content, news.NewsType, news.NewsDate, news.UserInfoId, news.FileName, user.FirstName, user.LastName }
+                            ).ToList();
+                foreach (var item in newslist)
+                {
+                    newsViewModels.Add(new NewsViewModel
+                    {
+                        Id = item.Id,
+                        Title = item.Title,
+                        Content = item.Content,
+                        FileName = item.FileName,
+                        NewsType = item.NewsType,
+                        NewsDate = item.NewsDate,
+                        UserInfoId = item.UserInfoId,
+                        FirstName = item.FirstName,
+                        LastName = item.LastName
+                    });
+                }
+            }
+            return View(newsViewModels);
+        }
+
+        private IDictionary<int, string> GetAuthorsFromDB()
+        {
+            IDictionary<int, string> authorsDict = new Dictionary<int, string>();
+            var users = UserManager.Users.ToList();
+            foreach(var user in users) 
+            {
+                authorsDict.Add(user.UserInfo.Id, user.UserInfo.FirstName + " " + user.UserInfo.LastName);
+            }
+            return authorsDict;
+            
         }
 
         // GET: Artiles/Create
-        public ActionResult CreateIndividual()
+        public ActionResult Create()
         {
-            GoodNew news = new GoodNew();
-            string userId = User.Identity.GetUserId();
-            var currentUser = _userManager.FindById(userId);
-
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            NewsViewModel news = new NewsViewModel();
+            ViewBag.IsUserAdmin =  UserManager.IsInRole(User.Identity.GetUserId(), "Admin");
+            news.Authors = GetAuthorsFromDB();
             news.UserInfoId = currentUser.UserInfo.Id;
+            news.FirstName = currentUser.UserInfo.FirstName;
+            news.LastName = currentUser.UserInfo.LastName;
+            news.NewsTypes = new Dictionary<string, string>
+            {
+                {"SchoolLife", "School Life" },
+                {"BreakingNews", "Break News" },
+                {"Entertainment", "Entertainment" },
+                {"Sports", "Sports" }
+            };
             return View(news);
         }
         // POST: Artiles/Create
@@ -125,19 +157,115 @@ namespace MyNewsWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateIndividual([Bind(Include = "Id,Title,NewsDate,UserInfoId,Content,NewsType,FileName")] GoodNew news)
+        public ActionResult Create(NewsViewModel news, HttpPostedFileBase newsFile)
         {
             if (ModelState.IsValid)
             {
-                string userId = User.Identity.GetUserId();
-                var currentUser = _userManager.FindById(userId);
-                news.UserInfoId = currentUser.UserInfo.Id;
-                db.GoodNews.Add(news);
+                if (newsFile != null)
+                {
+                    string path = Server.MapPath("~/Content/Uploads/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    newsFile.SaveAs(path + Path.GetFileName(newsFile.FileName));
+                    news.FileName = newsFile.FileName;
+                }
+
+                GoodNew goodNew = new GoodNew
+                {
+                    Title = news.Title,
+                    Content = news.Content,
+                    NewsType = news.NewsType,
+                    NewsDate = DateTime.Now,
+                    FileName = news.FileName,
+                    UserInfoId = news.UserInfoId
+                };
+                db.GoodNews.Add(goodNew);
                 db.SaveChanges();
-                return RedirectToAction("IndexUserNames");
+                return RedirectToAction("ManageNews");
             }
 
             return View(news);
+        }
+
+        // GET: Artiles/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            GoodNew selectedNews = db.GoodNews.Find(id);
+            if(selectedNews == null)
+            {
+                return HttpNotFound();
+            }
+
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            NewsViewModel news = new NewsViewModel();
+            ViewBag.IsUserAdmin = UserManager.IsInRole(User.Identity.GetUserId(), "Admin");
+            news.Authors = GetAuthorsFromDB();
+            news.UserInfoId = currentUser.UserInfo.Id;
+            news.NewsTypes = new Dictionary<string, string>
+            {
+                {"SchoolLife", "School Life" },
+                {"BreakingNews", "Break News" },
+                {"Entertainment", "Entertainment" },
+                {"Sports", "Sports" }
+            };
+            news.NewsType = selectedNews.NewsType;
+            news.Title = selectedNews.Title;
+            news.Content = selectedNews.Content;
+            news.Id = selectedNews.Id;
+            return View(news);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(NewsViewModel news)
+        {
+            if (ModelState.IsValid)
+            {
+                GoodNew selectedNews = db.GoodNews.Where(x => x.Id == news.Id).SingleOrDefault();
+                selectedNews.UserInfoId = news.UserInfoId;
+                selectedNews.Title = news.Title;
+                selectedNews.NewsType = news.NewsType;
+                selectedNews.Content = news.Content;
+                db.Entry(selectedNews).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("ManageNews");
+            }
+            return View(news);
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            GoodNew selectednews = db.GoodNews.Find(id);
+            if (selectednews == null)
+            {
+                return HttpNotFound();
+            }
+            NewsViewModel news = new NewsViewModel();
+            news.Id = selectednews.Id;
+            news.Title = selectednews.Title;
+            return View(news);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            GoodNew news = db.GoodNews.Find(id);
+            db.GoodNews.Remove(news);
+            db.SaveChanges();
+            return RedirectToAction("ManageNews");
         }
     }
 }

@@ -9,7 +9,7 @@
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body>
+<body ng-app="appModule" >
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -26,8 +26,7 @@
                     <li>@Html.ActionLink("Latest News", "Index", "News")</li>
                     <li>@Html.ActionLink("Manage Users","ManageUsers","Home")</li>
                     <li>@Html.ActionLink("Manage News", "ManageNews", "News")</li>
-                    <li>@Html.ActionLink("Our Journalist", "About", "Home")</li>
-                    <li>@Html.ActionLink("Documentation", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Documentation", "About", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

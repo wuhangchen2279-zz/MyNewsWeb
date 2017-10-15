@@ -44,6 +44,7 @@ namespace MyNewsWeb.Models
         public string FileName { get; set; }
         
         public virtual ICollection<GoodNew> GoodNews { get; set; }
+        public virtual ICollection<NewsComment> NewsComments { get; set; }
     }
 
     public class GoodNew
@@ -68,6 +69,27 @@ namespace MyNewsWeb.Models
 
         [ForeignKey("UserInfoId")]      // add here
         public virtual UserInfo UserInfo { set; get; }
+
+        public virtual ICollection<NewsComment> NewsComments { get; set; }
+    }
+
+    public class NewsComment
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        public string Comment { get; set; }
+
+        public int? UserInfoId { get; set; }
+
+        public int GoodNewId { get; set; }
+
+        [ForeignKey("UserInfoId")]      // add here
+        public virtual UserInfo UserInfo { set; get; }
+
+        [ForeignKey("GoodNewId")]
+        public virtual GoodNew GoodNew { set; get; }
     }
 
     public class EmailInput

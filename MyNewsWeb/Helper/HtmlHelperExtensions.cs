@@ -13,12 +13,22 @@ namespace MyNewsWeb.Helper
         {
             var imagePath = uploadsDirectory + filename;
             var imageSrc = File.Exists(HttpContext.Current.Server.MapPath(imagePath))
-                               ? imagePath : defaultImage;
+                               ? imagePath : defaultProfileImg;
 
             return imageSrc;
         }
 
-        private static string defaultImage = "/Content/DefaultImage.png";
+        public static string ImageOrDefaultNews(this HtmlHelper helper, string filename)
+        {
+            var imagePath = uploadsDirectory + filename;
+            var imageSrc = File.Exists(HttpContext.Current.Server.MapPath(imagePath))
+                               ? imagePath : defaultNewsImg;
+
+            return imageSrc;
+        }
+
+        private static string defaultNewsImg = "/Content/DefaultNewsImage.png";
+        private static string defaultProfileImg = "/Content/DefaultProfileImage.png";
         private static string uploadsDirectory = "/Content/Uploads/";
     }
 }
