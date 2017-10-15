@@ -11,6 +11,7 @@ namespace MyNewsWeb
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-1.12.4.js",
                         "~/Scripts/jquery-ui-1.12.1.js",
+                        "~/Scripts/myScripts/minimizeContent.js",
                         "~/Scripts/myScripts/JQueryUI.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -28,7 +29,8 @@ namespace MyNewsWeb
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                       "~/Scripts/angular.js",
                       "~/Scripts/myScripts/AngularForAdmin.js",
-                      "~/Scripts/smart-table.js"
+                      "~/Scripts/smart-table.js",
+                      "~/Scripts/angularjs-dropdown-multiselect.js"
                       ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

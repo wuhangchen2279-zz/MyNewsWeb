@@ -1,17 +1,15 @@
 ﻿@model IEnumerable<MyNewsWeb.Models.NewsViewModel>
-@Scripts.Render("~/Scripts/myScripts/minimizeContent.js")
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
 <div class="container" ng-controller="commentCtrl">
     @foreach (var item in Model)
     {
         <div class="well">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img alt="News Pic" src="@Html.ImageOrDefaultNews(item.FileName)" class="media-object" height="150" width="150">x
+                    <img alt="News Pic" src="@Html.ImageOrDefaultNews(item.FileName)" class="media-object" height="150" width="150">
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading">@Html.DisplayFor(modelItem => item.Title)</h4>
@@ -24,29 +22,34 @@
                     <ul class="list-inline list-unstyled">
                         <li><span><i class="glyphicon glyphicon-calendar"></i>@Html.DisplayFor(modelItem => item.NewsDate)</span></li>
                         <li>|</li>
-                        <span><i class="glyphicon glyphicon-comment"></i> <a data-toggle="modal" href="#commentModal" > 0 comments</a></span>
+                        <span><i class="glyphicon glyphicon-comment"></i> <a data-toggle="modal" href="#commentModal" ng-click="openCommentModal()"> 0 comments</a></span>
                         
                     </ul>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="commentModal" role="dialog">
+        
+    }
+
+    <div class="modal fade" id="commentModal" role="dialog">
             <div class="modal-dialog">
-                <!-- Modal content-->
+                    Modal content
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Post Your Comment</h4>
                     </div>
                     <div class="modal-body">
-                        <textarea ng-model="txtcomment" placeholder="Your Comment" style='width:550px'></textarea>
-                        <button ng-click='btn_add();' style='margin-top:10px;'>Post Comment</button>
+                        <form>
+                            <textarea ng-model="Comment" placeholder="Your Comment" style="width:550px"></textarea>
+                            <button ng-click="postComment()" style="margin-top:10px;">Post Comment</button>
 
-                        <h4>Comments</h4>
-                        <ul>
-                            <li ng-repeat="comnt in comment"> {{ comnt }} </li>
-                        </ul>
+                            <h4>Comments</h4>
+                            <ul>
+                                <li ng-repeat="item in commentsData"> {{ item }} </li>
+                            </ul>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -54,5 +57,4 @@
                 </div>
             </div>
         </div>
-    }
 </div>

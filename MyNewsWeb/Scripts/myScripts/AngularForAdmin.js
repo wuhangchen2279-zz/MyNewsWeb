@@ -183,10 +183,21 @@ app.controller('userCtrl', function ($scope, $http, UserService) {
 });
 // Here I have created a factory which is a popular way to create and configure services.
 // You may also create the factories in another script file which is best practice.
+
 app.factory('UserService', function ($http) {
     var fac = {};
     fac.GetAllRecords = function () {
         return $http.get('api/Admin/GetAllUsers');
     }
     return fac;
+});
+
+app.controller('commentCtrl', function ($scope) {
+    $scope.commentsData = [];
+    $scope.postComment = function () {
+        if ($scope.Comment != '') {
+            $scope.commentsData.push($scope.Comment);
+            $scope.Comment = "";
+        }
+    }
 });

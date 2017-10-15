@@ -44,4 +44,14 @@ namespace MyNewsWeb.Models
         public IDictionary<int, string> Authors { get; set; }
         public IDictionary<string, string> NewsTypes { get; set; }
     }
+
+    public class NewsUserCommentsViewModel : NewsViewModel
+    {
+        public CommentViewModel[] Comments { get; set; }
+    }
+
+    public class CommentViewModel
+    {
+        public string Comment { get; set; }
+    }
 }

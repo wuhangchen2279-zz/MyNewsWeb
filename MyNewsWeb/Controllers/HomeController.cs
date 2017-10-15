@@ -18,10 +18,12 @@ namespace MyNewsWeb.Controllers
             return View();
         }
 
-        public ActionResult ManageNews()
+        public ActionResult ShowNews()
         {
             return View();
         }
+
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

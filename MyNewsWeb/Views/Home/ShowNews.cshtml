@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Latest News";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" ng-controller="newsCtrl">
+    <div class="well">
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img alt="News Pic" src="@Html.ImageOrDefaultNews(item.FileName)" class="media-object" height="150" width="150">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">@Html.DisplayFor(modelItem => item.Title)</h4>
+                <p class="text-right">
+                    @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                </p>
+                <p class="minimize">
+                    @Html.DisplayFor(modelItem => item.Content)
+                </p>
+                <ul class="list-inline list-unstyled">
+                    <li><span><i class="glyphicon glyphicon-calendar"></i>@Html.DisplayFor(modelItem => item.NewsDate)</span></li>
+                    <li>|</li>
+                    <span><i class="glyphicon glyphicon-comment"></i> <a data-toggle="modal" href="#commentModal" ng-click="openCommentModal()"> 0 comments</a></span>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
