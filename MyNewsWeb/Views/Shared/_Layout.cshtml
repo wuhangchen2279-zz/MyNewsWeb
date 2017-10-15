@@ -28,8 +28,20 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Latest News", "ShowNews", "Home")</li>
-                    <li>@Html.ActionLink("Manage Users","ManageUsers","Home")</li>
-                    <li>@Html.ActionLink("Manage News", "ManageNews", "News")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Manage Users", "ManageUsers", "Home")</li>
+                        }
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin") || (User.IsInRole("Journalist")))
+                        {
+                            <li>@Html.ActionLink("Manage News", "ManageNews", "News")</li>
+                        }
+                    }
                     <li>@Html.ActionLink("Documentation", "About", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")

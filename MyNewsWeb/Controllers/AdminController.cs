@@ -19,6 +19,7 @@ using MyNewsWeb.Helper;
 
 namespace MyNewsWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : ApiController
     {
         private ApplicationUserManager _userManager;

@@ -12,7 +12,7 @@ namespace MyNewsWeb.Controllers
         {
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         public ActionResult ManageUsers()
         {
             return View();

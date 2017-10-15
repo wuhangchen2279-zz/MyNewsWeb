@@ -42,31 +42,32 @@ namespace MyNewsWeb.Controllers
         }
 
         //GET: News
+        //[Authorize(Roles = "Admin,Journalist")]
+        //public ActionResult Index()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    var currentUser = UserManager.FindById(userId);
+        //    var news = db.GoodNews.Include(n => n.UserInfo);
+        //    List<NewsViewModel> newsViewModel = new List<NewsViewModel>();
+        //    foreach (GoodNew goodNew in news)
+        //    {
+        //        newsViewModel.Add(new NewsViewModel
+        //        {
+        //            Title = goodNew.Title,
+        //            Content = goodNew.Content,
+        //            FileName = goodNew.FileName,
+        //            NewsType = goodNew.NewsType,
+        //            NewsDate = goodNew.NewsDate,
+        //            UserInfoId = goodNew.UserInfoId,
+        //            FirstName = goodNew.UserInfo.FirstName,
+        //            LastName = goodNew.UserInfo.LastName
+        //        });
+        //    }
+        //    return View(newsViewModel.OrderBy(t => t.NewsDate));
+        //}
 
-        public ActionResult Index()
-        {
-            var userId = User.Identity.GetUserId();
-            var currentUser = UserManager.FindById(userId);
-            var news = db.GoodNews.Include(n => n.UserInfo);
-            List<NewsViewModel> newsViewModel = new List<NewsViewModel>();
-            foreach (GoodNew goodNew in news)
-            {
-                newsViewModel.Add(new NewsViewModel
-                {
-                    Title = goodNew.Title,
-                    Content = goodNew.Content,
-                    FileName = goodNew.FileName,
-                    NewsType = goodNew.NewsType,
-                    NewsDate = goodNew.NewsDate,
-                    UserInfoId = goodNew.UserInfoId,
-                    FirstName = goodNew.UserInfo.FirstName,
-                    LastName = goodNew.UserInfo.LastName
-                });
-            }
-            return View(newsViewModel.OrderBy(t => t.NewsDate));
-        }
-
-        //for admin to manage news
+        //for admin and author to manage news
+        [Authorize(Roles = "Admin,Journalist")]
         public ActionResult ManageNews()  
         {
             var userId = User.Identity.GetUserId();
@@ -97,7 +98,9 @@ namespace MyNewsWeb.Controllers
             }
             else
             {
-               var newslist = (from user in db.UserInfos
+                //string currentUserId = User.Identity.GetUserId();
+                //return View(db.GoodNews.Where(m => m.UserInfo == currentUser.UserInfo).ToList());
+                var newslist = (from user in db.UserInfos
                                 join news in db.GoodNews on user.Id equals currentUser.UserInfo.Id
                                select new { news.Id, news.Title, news.Content, news.NewsType, news.NewsDate, news.UserInfoId, news.FileName, user.FirstName, user.LastName }
                             ).ToList();
@@ -131,7 +134,7 @@ namespace MyNewsWeb.Controllers
             return authorsDict;
             
         }
-
+        [Authorize(Roles = "Admin,Journalist")]
         // GET: Artiles/Create
         public ActionResult Create()
         {
@@ -154,7 +157,7 @@ namespace MyNewsWeb.Controllers
         // POST: Artiles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-
+        [Authorize(Roles = "Admin,Journalist")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(NewsViewModel news, HttpPostedFileBase newsFile)
@@ -191,6 +194,7 @@ namespace MyNewsWeb.Controllers
         }
 
         // GET: Artiles/Edit/5
+        [Authorize(Roles = "Admin,Journalist")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -225,6 +229,7 @@ namespace MyNewsWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Journalist")]
         public ActionResult Edit(NewsViewModel news)
         {
             if (ModelState.IsValid)
@@ -241,6 +246,7 @@ namespace MyNewsWeb.Controllers
             return View(news);
         }
 
+        [Authorize(Roles = "Admin,Journalist")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -260,6 +266,7 @@ namespace MyNewsWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Journalist")]
         public ActionResult Delete(int id)
         {
             GoodNew news = db.GoodNews.Find(id);
