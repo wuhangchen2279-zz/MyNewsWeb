@@ -29,6 +29,7 @@ namespace MyNewsWeb.Models
         public int UserInfoId { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "News Date")]
         public DateTime? NewsDate { get; set; }
 
         public string FirstName { get; set; }

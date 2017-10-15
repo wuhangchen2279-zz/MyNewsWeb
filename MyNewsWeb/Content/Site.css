@@ -32,3 +32,41 @@ textarea {
     padding: 0 5px 0 0;  
 }
 
+.silver {
+    background-color:silver;
+}
+
+tr.dataHover {
+   background-color:#FFFACD;
+}
+
+
+.dataTables_length 
+{
+  width: 40%;
+  float: left;
+}
+
+.dataTables_filter 
+{
+  width: 50%;
+  float: right;
+  text-align: right;
+}
+
+.data tbody tr.even
+{
+  background-color:silver;
+}
+
+.data  tr.even:hover 
+{
+  background-color: #ECFFB3;
+}
+
+.data  tr.odd:hover 
+{
+  background-color: #ECFFB3;
+}
+
+

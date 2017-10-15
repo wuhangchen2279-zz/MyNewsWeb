@@ -12,7 +12,8 @@ namespace MyNewsWeb
                         "~/Scripts/jquery-1.12.4.js",
                         "~/Scripts/jquery-ui-1.12.1.js",
                         "~/Scripts/myScripts/minimizeContent.js",
-                        "~/Scripts/myScripts/JQueryUI.js"));
+                        "~/Scripts/myScripts/JQueryUI.js",
+                        "~/Scripts/jquery.dataTables.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -36,7 +37,8 @@ namespace MyNewsWeb
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/jquery-ui.css"));
+                      "~/Content/jquery-ui.css",
+                      "~/Content/jquery.dataTables.min.css"));
         }
     }
 }
