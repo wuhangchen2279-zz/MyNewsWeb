@@ -45,13 +45,29 @@ namespace MyNewsWeb.Models
         public IDictionary<string, string> NewsTypes { get; set; }
     }
 
-    public class NewsUserCommentsViewModel : NewsViewModel
+    public class NewsCommentsViewModel 
     {
-        public CommentViewModel[] Comments { get; set; }
+        public string Comment { get; set; }
+        public int? GoodNewId { get; set; }
+        public int? UserInfoId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 
+    public class UserCommentViewModel
+    {
+        public int GoodNewId { get; set; }
+        public string Comment { get; set; }
+    }
+
+    /*
     public class CommentViewModel
     {
         public string Comment { get; set; }
+        public int? GoodNewId { get; set; }
+        public int? UserInfoId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
+    */
 }
