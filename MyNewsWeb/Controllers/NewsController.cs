@@ -98,10 +98,9 @@ namespace MyNewsWeb.Controllers
             }
             else
             {
-                //string currentUserId = User.Identity.GetUserId();
-                //return View(db.GoodNews.Where(m => m.UserInfo == currentUser.UserInfo).ToList());
-                var newslist = (from user in db.UserInfos
-                                join news in db.GoodNews on user.Id equals currentUser.UserInfo.Id
+               var newslist = (from user in db.UserInfos
+                                join news in db.GoodNews on user.Id equals news.UserInfoId
+                               where news.UserInfoId == currentUser.UserInfo.Id
                                select new { news.Id, news.Title, news.Content, news.NewsType, news.NewsDate, news.UserInfoId, news.FileName, user.FirstName, user.LastName }
                             ).ToList();
                 foreach (var item in newslist)

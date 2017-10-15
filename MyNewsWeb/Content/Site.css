@@ -69,4 +69,20 @@ tr.dataHover {
   background-color: #ECFFB3;
 }
 
+.articlecontent{
+    width:100%;
+}
 
+.newscontent{
+    width:70%;
+    float:left;
+    text-align:left;
+}
+.newspic{
+    width:30%;
+    float:left;
+    text-align:right;
+}
+.clearfix{
+    clear:both;
+}

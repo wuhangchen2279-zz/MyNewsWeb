@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <div class="container" ng-controller="newsCtrl">
     <div ng-repeat="news in newsData">
         <div class="well">
@@ -17,14 +18,25 @@
                     <p class="text-right">
                         {{news.FirstName}} {{news.LastName}}
                     </p>
-                    <p class="minimize">
-                        {{news.Content}}
-                    </p>
+                    <p ng-text-truncate="news.Content" ng-tt-chars-threshold="40"></p>
+                        
                     <ul class="list-inline list-unstyled">
                         <li><span><i class="glyphicon glyphicon-calendar"></i>{{news.NewsDate | date}}</span></li>
                         <li>|</li>
-                        <span><i class="glyphicon glyphicon-comment"></i> <a data-toggle="modal" href="#commentModal" ng-click="openCommentModal(newsData[$index])"> comment here </a></span>
-
+                        <li>
+                            <i class="glyphicon glyphicon-comment"></i> 
+                            <span ng-if="news.IsAuthenticate">
+                                <a data-toggle="modal" href="#commentModal" ng-click="openCommentModal(newsData[$index])"> comment here </a>
+                            </span>
+                            <span ng-if="!news.IsAuthenticate">
+                                <a ng-click="redirectLogin()"> comment here </a>
+                            </span>
+                        </li>
+                        <li>|</li>
+                        <li>
+                            <i class="fa fa-file-pdf-o"></i> 
+                            <a data-toggle="modal" href="#pdfModal" ng-click="openPdfModal(newsData[$index])"> Download News in PDF </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -55,4 +67,42 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="pdfModal" role="dialog">
+        <div class="modal-dialog">
+            Modal content
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Save News</h4>
+                </div>
+                <div id="domToPrint" class="modal-body">
+                    <h1>{{News.Title}}</h1>
+                    <div class="articlecontent">
+                        <div ng-if="News.FileName" class="newspic"> <img alt="News Picture Not Available" src="~/Content/Uploads/{{News.FileName}}" class="media-object" height="150" width="150"></div>
+                        <div ng-if="!News.FileName" class="newspic"> <img alt="News Picture Not Available" src="~/Content/DefaultNewsImage.png" class="media-object" height="150" width="150"></div>
+                        <div class="newscontent">
+                            <article>
+                                <p>
+                                    {{News.Content}}
+                                </p>
+                            </article>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <hr/>
+                    <div>
+                        <span><i class="fa fa-user" aria-hidden="true"></i> {{News.FirstName}} {{News.LastName}}</span> <span style="padding-left: 20px"><i class="fa fa-calendar" aria-hidden="true"></i> {{News.NewsDate | date}}</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="savePdf" data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+ 

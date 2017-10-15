@@ -11,9 +11,18 @@ namespace MyNewsWeb
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-1.12.4.js",
                         "~/Scripts/jquery-ui-1.12.1.js",
-                        "~/Scripts/myScripts/minimizeContent.js",
                         "~/Scripts/myScripts/JQueryUI.js",
                         "~/Scripts/jquery.dataTables.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/pdfgenerator").Include(
+                        "~/Scripts/canvg.js",
+                        "~/Scripts/jspdf.min.js",
+                        "~/Scripts/html2canvas.min.js",
+                        "~/Scripts/myScripts/SavePDF.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/reCAPTCHA").Include(
+                        "~/Scripts/recaptcha_api.js",
+                        "~/Scripts/myScripts/reCaptchaVerify.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -29,6 +38,7 @@ namespace MyNewsWeb
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                       "~/Scripts/angular.js",
+                      "~/Scripts/ng-text-truncate.js",
                       "~/Scripts/myScripts/AngularForAdmin.js",
                       "~/Scripts/smart-table.js",
                       "~/Scripts/angularjs-dropdown-multiselect.js"
