@@ -192,12 +192,64 @@ app.factory('UserService', function ($http) {
     return fac;
 });
 
-app.controller('commentCtrl', function ($scope) {
-    $scope.commentsData = [];
+app.controller('newsCtrl', function ($scope, $http, NewsService) {
+
+    $scope.newsData = null;
+    // Fetching records from the factory created at the bottom of the script file
+    NewsService.GetAllRecords().then(function (d) {
+        $scope.newsData = d.data; // Success
+    }, function () {
+        alert('Error Occured !!!'); // Failed
+    });
+
+    $scope.commentsData = null;
+
+    $scope.UserComment = {
+        GoodNewId: '',
+        Comment: '',
+    }
+
+    $scope.openCommentModal = function (data) {
+        $http({
+            method: 'GET',
+            url: 'api/NewsDisplay/GetAllCommentsForNews/',
+            params: { newsId: data.Id }
+        }).then(function successCallback(response) {
+            $scope.commentsData = response.data;
+            $scope.UserComment.GoodNewId = data.Id;
+        }, function errorCallback(response) {
+            alert("Error : " + response.data.ExceptionMessage);
+        });
+        
+    }
+
     $scope.postComment = function () {
-        if ($scope.Comment != '') {
-            $scope.commentsData.push($scope.Comment);
-            $scope.Comment = "";
+        if ($scope.UserComment.Comment != '') {
+            $http({
+                method: 'POST',
+                url: 'api/NewsDisplay/PostComment/',
+                data: $scope.UserComment
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+
+                // when the response is available
+                $scope.commentsData.push(response.data);
+                $scope.UserComment.Comment = "";
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                alert("Error : " + response.data.ExceptionMessage);
+            });
+        } else {
+            alert("Please put your comment")
         }
     }
+});
+
+app.factory('NewsService', function ($http) {
+    var fac = {};
+    fac.GetAllRecords = function () {
+        return $http.get('api/NewsDisplay/GetAllNews');
+    }
+    return fac;
 });
