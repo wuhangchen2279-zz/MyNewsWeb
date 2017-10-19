@@ -63,14 +63,9 @@ namespace MyNewsWeb.Models
         public string Comment { get; set; }
     }
 
-    /*
-    public class CommentViewModel
+    public class NewsTypeCountViewModel
     {
-        public string Comment { get; set; }
-        public int? GoodNewId { get; set; }
-        public int? UserInfoId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string NewsType { get; set; }
+        public int NewsTypeCount { get; set; }
     }
-    */
 }

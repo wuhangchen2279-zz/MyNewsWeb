@@ -118,5 +118,45 @@ namespace MyNewsWeb.Controllers
             }
             return newsList;
         }
+
+        public IEnumerable<NewsTypeCountViewModel> GetNewsTypeCount()
+        {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            List<NewsTypeCountViewModel> newsTypeCounts = new List<NewsTypeCountViewModel>();
+
+            if (UserManager.IsInRole(User.Identity.GetUserId(), "Admin"))
+            {
+                var newsTypeCountList = (from user in context.UserInfos
+                                         join news in context.GoodNews on user.Id equals news.UserInfoId
+                                         group news.Id by news.NewsType into g
+                                         select new { NewsType = g.Key, NewsTypeCount = g.Count() }).ToList();
+                foreach (var typeCount in newsTypeCountList)
+                {
+                    newsTypeCounts.Add(new NewsTypeCountViewModel
+                    {
+                        NewsType = typeCount.NewsType,
+                        NewsTypeCount = typeCount.NewsTypeCount
+                    });
+                }
+            }
+            else
+            {
+                var newsTypeCountList = (from user in context.UserInfos
+                                         join news in context.GoodNews on user.Id equals news.UserInfoId
+                                         where news.UserInfoId == currentUser.UserInfo.Id
+                                         group news.Id by news.NewsType into g
+                                         select new { NewsType = g.Key, NewsTypeCount = g.Count() }).ToList();
+                foreach (var typeCount in newsTypeCountList)
+                {
+                    newsTypeCounts.Add(new NewsTypeCountViewModel
+                    {
+                        NewsType = typeCount.NewsType,
+                        NewsTypeCount = typeCount.NewsTypeCount
+                    });
+                }
+            }
+
+            return newsTypeCounts;
+        }
     }
 }

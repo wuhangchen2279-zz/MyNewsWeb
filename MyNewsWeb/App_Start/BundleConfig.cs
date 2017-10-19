@@ -39,6 +39,8 @@ namespace MyNewsWeb
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                       "~/Scripts/angular.js",
                       "~/Scripts/ng-text-truncate.js",
+                      "~/Scripts/Chart.min.js",
+                      "~/Scripts/angular-chart.min.js",
                       "~/Scripts/myScripts/AngularForAdmin.js",
                       "~/Scripts/smart-table.js",
                       "~/Scripts/angularjs-dropdown-multiselect.js"

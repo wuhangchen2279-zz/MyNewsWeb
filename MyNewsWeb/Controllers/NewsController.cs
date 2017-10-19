@@ -41,30 +41,6 @@ namespace MyNewsWeb.Controllers
             }
         }
 
-        //GET: News
-        //[Authorize(Roles = "Admin,Journalist")]
-        //public ActionResult Index()
-        //{
-        //    var userId = User.Identity.GetUserId();
-        //    var currentUser = UserManager.FindById(userId);
-        //    var news = db.GoodNews.Include(n => n.UserInfo);
-        //    List<NewsViewModel> newsViewModel = new List<NewsViewModel>();
-        //    foreach (GoodNew goodNew in news)
-        //    {
-        //        newsViewModel.Add(new NewsViewModel
-        //        {
-        //            Title = goodNew.Title,
-        //            Content = goodNew.Content,
-        //            FileName = goodNew.FileName,
-        //            NewsType = goodNew.NewsType,
-        //            NewsDate = goodNew.NewsDate,
-        //            UserInfoId = goodNew.UserInfoId,
-        //            FirstName = goodNew.UserInfo.FirstName,
-        //            LastName = goodNew.UserInfo.LastName
-        //        });
-        //    }
-        //    return View(newsViewModel.OrderBy(t => t.NewsDate));
-        //}
 
         //for admin and author to manage news
         [Authorize(Roles = "Admin,Journalist")]
@@ -103,6 +79,7 @@ namespace MyNewsWeb.Controllers
                                where news.UserInfoId == currentUser.UserInfo.Id
                                select new { news.Id, news.Title, news.Content, news.NewsType, news.NewsDate, news.UserInfoId, news.FileName, user.FirstName, user.LastName }
                             ).ToList();
+
                 foreach (var item in newslist)
                 {
                     newsViewModels.Add(new NewsViewModel
@@ -212,6 +189,8 @@ namespace MyNewsWeb.Controllers
             ViewBag.IsUserAdmin = UserManager.IsInRole(User.Identity.GetUserId(), "Admin");
             news.Authors = GetAuthorsFromDB();
             news.UserInfoId = currentUser.UserInfo.Id;
+            news.FirstName = currentUser.UserInfo.FirstName;
+            news.LastName = currentUser.UserInfo.LastName;
             news.NewsTypes = new Dictionary<string, string>
             {
                 {"SchoolLife", "School Life" },

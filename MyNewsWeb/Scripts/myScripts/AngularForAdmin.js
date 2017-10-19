@@ -1,5 +1,5 @@
 ﻿// Defining angularjs module
-var app = angular.module('appModule', ['angularjs-dropdown-multiselect', 'smart-table', 'ngTextTruncate']);
+var app = angular.module('appModule', ['angularjs-dropdown-multiselect', 'smart-table', 'ngTextTruncate', 'chart.js']);
 // Defining angularjs Controller and injecting ProductsService
 app.controller('userCtrl', function ($scope, $http, UserService) {
     $scope.predicateUsers = ['Email', 'FirstName', 'LastName'];
@@ -57,7 +57,7 @@ app.controller('userCtrl', function ($scope, $http, UserService) {
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(EmailInput),
-                url: 'api/Admin/SendEmail',
+                url: '/api/Admin/SendEmail',
                 success: function (data, status) {
                     $scope.$apply(function () {
                     alert("Email Sent Successfully !!!");
@@ -106,7 +106,7 @@ app.controller('userCtrl', function ($scope, $http, UserService) {
         $scope.User.FirstName != "" && $scope.User.LastName != "" && $scope.User.Password != "") {
             $http({
                 method: 'POST',
-                url: 'api/Admin/AddUser/',
+                url: '/api/Admin/AddUser/',
                 data: $scope.User
             }).then(function successCallback(response) {
                 // this callback will be called asynchronously
@@ -153,7 +153,7 @@ app.controller('userCtrl', function ($scope, $http, UserService) {
         $scope.User.FirstName != "" && $scope.User.LastName != "" && $scope.User.Password != "") {            
             $http({
                 method: 'PUT',
-                url: 'api/Admin/UpdateUser/' + $scope.User.Id,
+                url: '/api/Admin/UpdateUser/' + $scope.User.Id,
                 data: $scope.User
             }).then(function successCallback(response) {
                 $scope.userData = response.data;
@@ -171,7 +171,7 @@ app.controller('userCtrl', function ($scope, $http, UserService) {
     $scope.deleteUser = function () {
         $http({
             method: 'DELETE',
-            url: 'api/Admin/DeleteUser/' + $scope.User.Id,
+            url: '/api/Admin/DeleteUser/' + $scope.User.Id,
         }).then(function successCallback(response) {
             $scope.userData = response.data;
             $scope.clearUser();
@@ -187,7 +187,7 @@ app.controller('userCtrl', function ($scope, $http, UserService) {
 app.factory('UserService', function ($http) {
     var fac = {};
     fac.GetAllRecords = function () {
-        return $http.get('api/Admin/GetAllUsers');
+        return $http.get('/api/Admin/GetAllUsers');
     }
     return fac;
 });
@@ -212,7 +212,7 @@ app.controller('newsCtrl', function ($scope, $http, $window, NewsService) {
     $scope.openCommentModal = function (data) {
         $http({
             method: 'GET',
-            url: 'api/NewsDisplay/GetAllCommentsForNews/',
+            url: '/api/NewsDisplay/GetAllCommentsForNews/',
             params: { newsId: data.Id }
         }).then(function successCallback(response) {
             $scope.commentsData = response.data;
@@ -252,7 +252,7 @@ app.controller('newsCtrl', function ($scope, $http, $window, NewsService) {
         if ($scope.UserComment.Comment != '') {
             $http({
                 method: 'POST',
-                url: 'api/NewsDisplay/PostComment/',
+                url: '/api/NewsDisplay/PostComment/',
                 data: $scope.UserComment
             }).then(function successCallback(response) {
                 // this callback will be called asynchronously
@@ -274,7 +274,33 @@ app.controller('newsCtrl', function ($scope, $http, $window, NewsService) {
 app.factory('NewsService', function ($http) {
     var fac = {};
     fac.GetAllRecords = function () {
-        return $http.get('api/NewsDisplay/GetAllNews');
+        return $http.get('/api/NewsDisplay/GetAllNews');
+    }
+    return fac;
+});
+
+app.controller('newsTypeCtrl', function ($scope, $http, $window, NewsTypeCountService) {
+
+    var newsTypeCountData = null;
+    // Fetching records from the factory created at the bottom of the script file
+    NewsTypeCountService.GetAllRecords().then(function (d) {
+        newsTypeCountData = d.data; // Success
+        $scope.labels = [];
+        $scope.data = [];
+        angular.forEach(newsTypeCountData, function (value, key) {
+            $scope.labels.push(value.NewsType);
+            $scope.data.push(value.NewsTypeCount);
+        });
+    }, function () {
+        alert('Error Occured !!!'); // Failed
+    });
+
+});
+
+app.factory('NewsTypeCountService', function ($http) {
+    var fac = {};
+    fac.GetAllRecords = function () {
+        return $http.get('/api/NewsDisplay/GetNewsTypeCount');
     }
     return fac;
 });

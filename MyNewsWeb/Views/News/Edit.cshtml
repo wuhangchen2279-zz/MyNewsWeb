@@ -65,31 +65,22 @@
                 {
                     @Html.DropDownListFor(model => model.UserInfoId, // Store selected value in Model.UserInfoId
 
-               // This argument needs some explanation - here we take a Distionary<string, string>
-               // and turn it into an instance of SelectList, see blog post for more details
-               new SelectList(Model.Authors, "Key", "Value", Model.UserInfoId),
+                            // This argument needs some explanation - here we take a Distionary<string, string>
+                            // and turn it into an instance of SelectList, see blog post for more details
+                            new SelectList(Model.Authors, "Key", "Value", Model.UserInfoId),
 
-               // Text for the first 'default' option
-               "- Please choose author -",
+                            // Text for the first 'default' option
+                            "- Please choose author -",
 
-               // A class name to put on the "<select>"
-               new { @class = "form-control" }
-               )
+                            // A class name to put on the "<select>"
+                            new { @class = "form-control" }
+                            )
                 }
+
                 else
                 {
-                    @Html.DropDownListFor(model => model.UserInfoId, // Store selected value in Model.State
-
-               // This argument needs some explanation - here we take a Distionary<string, string>
-               // and turn it into an instance of SelectList, see blog post for more details
-               new SelectList(Model.Authors, "Key", "Value", Model.UserInfoId),
-
-               // Text for the first 'default' option
-               "- Please choose author -",
-
-               // A class name to put on the "<select>"
-               new { @class = "form-control", @disabled = "disabled" }
-               )
+                    @Html.HiddenFor(model => model.UserInfoId)
+                    @Html.DisplayFor(model => model.FullName, new { @class = "control-label col-md-2" })
                 }
             </div>
         </div>
