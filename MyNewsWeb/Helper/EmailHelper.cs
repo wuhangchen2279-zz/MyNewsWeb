@@ -9,7 +9,7 @@ namespace MyNewsWeb.Helper
 {
     public class EmailHelper
     {
-        public static readonly string EMAIL_CREDENTIALS = "justulike691209";
+        public static readonly string EMAIL_CREDENTIALS = "";
         public static readonly string SMTP_CLIENT = "smtp.gmail.com";
 
         public bool SendEmail(string sender, string[] recipients, string subject, string message)
