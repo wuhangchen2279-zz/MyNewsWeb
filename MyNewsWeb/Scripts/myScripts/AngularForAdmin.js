@@ -46,7 +46,7 @@ app.controller('userCtrl', function ($scope, $http, UserService) {
             if (key) $scope.emailArray.push(value);
         });
         var EmailInput = {
-            Sender: 'judyzou666@gmail.com',
+            Sender: '',
             Receivers: $scope.emailArray,
             EmailSubject: 'mysubject',
             EmailBody: 'Hello'
